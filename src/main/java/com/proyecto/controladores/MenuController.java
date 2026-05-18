@@ -1,15 +1,20 @@
 package com.proyecto.controladores;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.proyecto.modelos.Usuario;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MenuController {
@@ -20,6 +25,16 @@ public class MenuController {
     @FXML
     private Label lblRolUsuario;
 
+    @FXML
+    private VBox contenidoPrincipal;
+
+    private List<Node> contenidoDashboard;
+
+    @FXML
+    public void initialize() {
+        contenidoDashboard = new ArrayList<>(contenidoPrincipal.getChildren());
+    }
+
     public void inicializarUsuario(Usuario usuario) {
         lblNombreUsuario.setText("EduVot Admin - " + usuario.getNombreUsuario());
         lblRolUsuario.setText("Administrador");
@@ -27,7 +42,7 @@ public class MenuController {
 
     @FXML
     private void abrirUsuarios() {
-        abrirVentana("/com/Interfaz/GestionUsuarios.fxml", "Gestion de usuarios");
+        cargarVistaUsuarios();
     }
 
     @FXML
@@ -67,16 +82,23 @@ public class MenuController {
         alert.showAndWait();
     }
 
-    private void abrirVentana(String rutaFXML, String titulo) {
+    public void mostrarDashboard() {
+        contenidoPrincipal.getChildren().setAll(contenidoDashboard);
+    }
+
+    private void cargarVistaUsuarios() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/GestionUsuarios.fxml"));
             Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle(titulo);
-            stage.setScene(new Scene(root));
-            stage.show();
+            GestionUsuariosController controller = loader.getController();
+            controller.setMenuController(this);
+
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            contenidoPrincipal.getChildren().setAll(scrollPane);
         } catch (IOException e) {
-            System.out.println("Error al abrir ventana: " + e.getMessage());
+            System.out.println("Error al cargar gestion de usuarios: " + e.getMessage());
         }
     }
 }

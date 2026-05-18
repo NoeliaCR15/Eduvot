@@ -70,6 +70,11 @@ public class GestionUsuariosController {
 
     private UsuarioDAO usuarioDAO;
     private ObservableList<Usuario> listaUsuarios;
+    private MenuController menuController;
+
+    public void setMenuController(MenuController menuController) {
+        this.menuController = menuController;
+    }
     private static final String[] CURSOS = {"1ESO", "2ESO", "3ESO", "4ESO", "1BACH", "2BACH", "1DAM", "2DAM"};
 
     @FXML
@@ -193,6 +198,11 @@ public class GestionUsuariosController {
 
     @FXML
     private void volverPanelAdministrador() {
+        if (menuController != null) {
+            menuController.mostrarDashboard();
+            return;
+        }
+
         Stage stageActual = (Stage) tablaUsuarios.getScene().getWindow();
         stageActual.close();
     }

@@ -43,91 +43,95 @@
                     </children>
                 </HBox>
 
-                <HBox spacing="24.0" styleClass="hero-card">
+                <VBox fx:id="contenidoPrincipal" spacing="24.0">
                     <children>
-                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                        <HBox spacing="24.0" styleClass="hero-card">
                             <children>
-                                <Label styleClass="hero-badge" text="Administrador" />
-                                <Label styleClass="hero-title" text="Gestiona EduVot desde un solo panel" wrapText="true" />
-                                <Label styleClass="hero-text" text="Accede rapidamente a usuarios, subcategorias, encuestas y resultados desde una vista clara, moderna y preparada para crecer con el proyecto." wrapText="true" />
+                                <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="hero-badge" text="Administrador" />
+                                        <Label styleClass="hero-title" text="Gestiona EduVot desde un solo panel" wrapText="true" />
+                                        <Label styleClass="hero-text" text="Accede rapidamente a usuarios, subcategorias, encuestas y resultados desde una vista clara, moderna y preparada para crecer con el proyecto." wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER" spacing="12.0" styleClass="hero-side-card">
+                                    <children>
+                                        <Label styleClass="hero-side-number" text="4" />
+                                        <Label styleClass="hero-side-label" text="modulos principales" />
+                                    </children>
+                                </VBox>
                             </children>
-                        </VBox>
-                        <VBox alignment="CENTER" spacing="12.0" styleClass="hero-side-card">
+                        </HBox>
+
+                        <GridPane hgap="18.0" vgap="18.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                            </columnConstraints>
                             <children>
-                                <Label styleClass="hero-side-number" text="4" />
-                                <Label styleClass="hero-side-label" text="modulos principales" />
+                                <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <children>
+                                        <VBox spacing="14.0" styleClass="module-card">
+                                            <padding>
+                                                <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                            </padding>
+                                            <children>
+                                                <Label styleClass="module-title" text="Gestion de usuarios" />
+                                                <Label styleClass="module-text" text="Administra altas, bajas, ediciones y estados de acceso para las personas que usaran la plataforma." wrapText="true" />
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirUsuarios" styleClass="module-button" text="Abrir usuarios" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
+
+                                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <children>
+                                        <VBox spacing="14.0" styleClass="module-card">
+                                            <padding>
+                                                <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                            </padding>
+                                            <children>
+                                                <Label styleClass="module-title" text="Subcategorias" />
+                                                <Label styleClass="module-text" text="Organiza profesorado, alumnado, familias u otros colectivos que participaran en cada proceso de votacion." wrapText="true" />
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirSubcategorias" styleClass="module-button" text="Abrir subcategorias" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
+
+                                <StackPane GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <children>
+                                        <VBox spacing="14.0" styleClass="module-card">
+                                            <padding>
+                                                <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                            </padding>
+                                            <children>
+                                                <Label styleClass="module-title" text="Encuestas y votaciones" />
+                                                <Label styleClass="module-text" text="Crea procesos electorales, define fechas, permisos y tipos de encuesta para cada colectivo." wrapText="true" />
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirEncuestas" styleClass="module-button" text="Abrir encuestas" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
+
+                                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <VBox spacing="14.0" styleClass="module-card">
+                                            <padding>
+                                                <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                            </padding>
+                                            <children>
+                                                <Label styleClass="module-title" text="Resultados y participacion" />
+                                                <Label styleClass="module-text" text="Consulta el avance de las votaciones, los recuentos y la participacion general del sistema." wrapText="true" />
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirResultados" styleClass="module-button" text="Abrir resultados" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
                             </children>
-                        </VBox>
+                        </GridPane>
                     </children>
-                </HBox>
-
-                <GridPane hgap="18.0" vgap="18.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
-                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
-                    </columnConstraints>
-                    <children>
-                        <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0">
-                            <children>
-                                <VBox spacing="14.0" styleClass="module-card">
-                                    <padding>
-                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
-                                    </padding>
-                                    <children>
-                                        <Label styleClass="module-title" text="Gestion de usuarios" />
-                                        <Label styleClass="module-text" text="Administra altas, bajas, ediciones y estados de acceso para las personas que usaran la plataforma." wrapText="true" />
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirUsuarios" styleClass="module-button" text="Abrir usuarios" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </StackPane>
-
-                        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <children>
-                                <VBox spacing="14.0" styleClass="module-card">
-                                    <padding>
-                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
-                                    </padding>
-                                    <children>
-                                        <Label styleClass="module-title" text="Subcategorias" />
-                                        <Label styleClass="module-text" text="Organiza profesorado, alumnado, familias u otros colectivos que participaran en cada proceso de votacion." wrapText="true" />
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirSubcategorias" styleClass="module-button" text="Abrir subcategorias" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </StackPane>
-
-                        <StackPane GridPane.columnIndex="0" GridPane.rowIndex="1">
-                            <children>
-                                <VBox spacing="14.0" styleClass="module-card">
-                                    <padding>
-                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
-                                    </padding>
-                                    <children>
-                                        <Label styleClass="module-title" text="Encuestas y votaciones" />
-                                        <Label styleClass="module-text" text="Crea procesos electorales, define fechas, permisos y tipos de encuesta para cada colectivo." wrapText="true" />
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirEncuestas" styleClass="module-button" text="Abrir encuestas" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </StackPane>
-
-                        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <children>
-                                <VBox spacing="14.0" styleClass="module-card">
-                                    <padding>
-                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
-                                    </padding>
-                                    <children>
-                                        <Label styleClass="module-title" text="Resultados y participacion" />
-                                        <Label styleClass="module-text" text="Consulta el avance de las votaciones, los recuentos y la participacion general del sistema." wrapText="true" />
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirResultados" styleClass="module-button" text="Abrir resultados" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </StackPane>
-                    </children>
-                </GridPane>
+                </VBox>
             </children>
         </VBox>
     </children>
