@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1180.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proyecto.controladores.MenuController">
+    <children>
+        <VBox alignment="TOP_CENTER" spacing="24.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" styleClass="admin-topbar">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="14.0">
+                            <children>
+                                <ImageView fitHeight="82.0" preserveRatio="true">
+                                    <image>
+                                        <Image url="@Logo.png" />
+                                    </image>
+                                    <viewport>
+                                        <Rectangle2D height="700.0" minX="228.0" minY="244.0" width="566.0" />
+                                    </viewport>
+                                </ImageView>
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label fx:id="lblNombreUsuario" styleClass="admin-brand" text="EduVot Admin" />
+                                        <Label fx:id="lblRolUsuario" styleClass="admin-brand-subtitle" text="Panel de administracion" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#salirApp" styleClass="secondary-button" text="Cerrar sesion" />
+                    </children>
+                </HBox>
+
+                <HBox spacing="24.0" styleClass="hero-card">
+                    <children>
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="hero-badge" text="Administrador" />
+                                <Label styleClass="hero-title" text="Gestiona EduVot desde un solo panel" wrapText="true" />
+                                <Label styleClass="hero-text" text="Accede rapidamente a usuarios, subcategorias, encuestas y resultados desde una vista clara, moderna y preparada para crecer con el proyecto." wrapText="true" />
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="12.0" styleClass="hero-side-card">
+                            <children>
+                                <Label styleClass="hero-side-number" text="4" />
+                                <Label styleClass="hero-side-label" text="modulos principales" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <GridPane hgap="18.0" vgap="18.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                    </columnConstraints>
+                    <children>
+                        <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <children>
+                                <VBox spacing="14.0" styleClass="module-card">
+                                    <padding>
+                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="module-title" text="Gestion de usuarios" />
+                                        <Label styleClass="module-text" text="Administra altas, bajas, ediciones y estados de acceso para las personas que usaran la plataforma." wrapText="true" />
+                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirUsuarios" styleClass="module-button" text="Abrir usuarios" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+
+                        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <children>
+                                <VBox spacing="14.0" styleClass="module-card">
+                                    <padding>
+                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="module-title" text="Subcategorias" />
+                                        <Label styleClass="module-text" text="Organiza profesorado, alumnado, familias u otros colectivos que participaran en cada proceso de votacion." wrapText="true" />
+                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirSubcategorias" styleClass="module-button" text="Abrir subcategorias" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+
+                        <StackPane GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <children>
+                                <VBox spacing="14.0" styleClass="module-card">
+                                    <padding>
+                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="module-title" text="Encuestas y votaciones" />
+                                        <Label styleClass="module-text" text="Crea procesos electorales, define fechas, permisos y tipos de encuesta para cada colectivo." wrapText="true" />
+                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirEncuestas" styleClass="module-button" text="Abrir encuestas" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+
+                        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <VBox spacing="14.0" styleClass="module-card">
+                                    <padding>
+                                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="module-title" text="Resultados y participacion" />
+                                        <Label styleClass="module-text" text="Consulta el avance de las votaciones, los recuentos y la participacion general del sistema." wrapText="true" />
+                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirResultados" styleClass="module-button" text="Abrir resultados" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </GridPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

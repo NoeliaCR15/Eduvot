@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="620.0" prefWidth="900.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proyecto.controladores.PanelUsuarioController">
+    <children>
+        <VBox spacing="24.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" styleClass="admin-topbar">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="14.0">
+                            <children>
+                                <ImageView fitHeight="52.0" preserveRatio="true">
+                                    <image>
+                                        <Image url="@Logo.png" />
+                                    </image>
+                                </ImageView>
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label styleClass="admin-brand" text="EduVot" />
+                                        <Label styleClass="admin-brand-subtitle" text="Zona de votacion" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#cerrarSesion" styleClass="secondary-button" text="Cerrar sesion" />
+                    </children>
+                </HBox>
+
+                <VBox spacing="12.0" styleClass="user-hero">
+                    <children>
+                        <Label styleClass="hero-badge" text="Usuario" />
+                        <Label fx:id="lblNombreUsuario" styleClass="hero-title" text="Usuario" wrapText="true" />
+                        <Label fx:id="lblGrupoUsuario" styleClass="hero-text" text="Curso" wrapText="true" />
+                    </children>
+                    <padding>
+                        <Insets bottom="34.0" left="34.0" right="34.0" top="34.0" />
+                    </padding>
+                </VBox>
+
+                <HBox spacing="22.0">
+                    <children>
+                        <VBox spacing="14.0" styleClass="module-card" HBox.hgrow="ALWAYS">
+                            <padding>
+                                <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+                            </padding>
+                            <children>
+                                <Label styleClass="module-title" text="Votaciones disponibles" />
+                                <Label styleClass="module-text" text="Accede a las encuestas abiertas para tu curso y subcategoria, y registra tu participacion." wrapText="true" />
+                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirVotaciones" styleClass="module-button" text="Ver votaciones" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="14.0" styleClass="module-card" HBox.hgrow="ALWAYS">
+                            <padding>
+                                <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+                            </padding>
+                            <children>
+                                <Label styleClass="module-title" text="Mi participacion" />
+                                <Label styleClass="module-text" text="Consulta el estado de tus votaciones sin acceder a herramientas de administracion." wrapText="true" />
+                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#abrirMisVotos" styleClass="secondary-button" text="Ver mi actividad" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

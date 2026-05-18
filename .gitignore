@@ -1,0 +1,17 @@
+target/
+
+# IDE / editor local files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Accidental empty files
+cmd
+mvn
