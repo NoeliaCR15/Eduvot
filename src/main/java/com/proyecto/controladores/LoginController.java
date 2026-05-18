@@ -102,13 +102,16 @@ public class LoginController {
     private void abrirPanelUsuario(Usuario usuario) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/PanelUsuario.fxml"));
-            Scene scene = new Scene(loader.load(), 900, 620);
+            Scene scene = new Scene(loader.load(), 1180, 720);
             PanelUsuarioController controller = loader.getController();
             controller.inicializarUsuario(usuario);
 
             Stage stageActual = (Stage) txtUsuario.getScene().getWindow();
             stageActual.setTitle("EduVot - Zona de votacion");
+            stageActual.setMinWidth(1180);
+            stageActual.setMinHeight(720);
             stageActual.setScene(scene);
+            stageActual.setMaximized(true);
             stageActual.show();
 
         } catch (IOException e) {

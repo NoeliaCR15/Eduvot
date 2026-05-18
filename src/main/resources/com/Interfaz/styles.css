@@ -148,7 +148,7 @@
 }
 
 .user-hero {
-    -fx-background-color: linear-gradient(to right, #235E5A, #3A7D6D);
+    -fx-background-color: linear-gradient(to right, #2F80C8, #65B7F3);
     -fx-background-radius: 30;
     -fx-effect: dropshadow(gaussian, rgba(27, 42, 65, 0.16), 20, 0, 0, 7);
 }
