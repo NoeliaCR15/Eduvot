@@ -86,6 +86,13 @@
                                                 <CheckBox fx:id="chkActivo" selected="true" text="Usuario activo" />
                                             </children>
                                         </HBox>
+
+                                        <VBox fx:id="contenedorFamilia" managed="false" spacing="6.0" visible="false">
+                                            <children>
+                                                <Label styleClass="field-label" text="Alumno/s vinculados si pertenece a Familia o tutor" />
+                                                <MenuButton fx:id="btnAlumnosFamilia" mnemonicParsing="false" prefWidth="620.0" styleClass="admin-field" text="Seleccionar alumno/s" />
+                                            </children>
+                                        </VBox>
                                     </children>
                                 </VBox>
 

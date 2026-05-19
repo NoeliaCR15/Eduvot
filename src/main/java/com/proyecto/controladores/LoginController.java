@@ -46,6 +46,7 @@ public class LoginController {
     @FXML
     public void initialize() {
         usuarioDAO = new UsuarioDAO();
+        // Ambos campos comparten el mismo texto para alternar entre oculto y visible.
         txtPasswordVisible.textProperty().bindBidirectional(txtPassword.textProperty());
         passwordContainer.setOnMouseClicked(event -> {
             if (!esClickEnBotonPassword(event.getTarget())) {
@@ -71,6 +72,7 @@ public class LoginController {
             return;
         }
 
+        // El rol del usuario decide que panel se abre tras iniciar sesion.
         if (usuario.isEsAdministrador()) {
             abrirPanelAdministrador(usuario);
         } else {
@@ -124,6 +126,7 @@ public class LoginController {
     private void alternarPasswordVisible() {
         passwordVisible = !passwordVisible;
 
+        // JavaFX usa visible/managed para que el campo oculto no ocupe espacio.
         txtPassword.setVisible(!passwordVisible);
         txtPassword.setManaged(!passwordVisible);
         txtPasswordVisible.setVisible(passwordVisible);
@@ -152,6 +155,7 @@ public class LoginController {
             return false;
         }
 
+        // Recorre los padres del nodo para saber si el click fue en el boton del ojo.
         Node nodo = (Node) target;
         while (nodo != null) {
             if (nodo == btnVerPassword) {

@@ -12,6 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            // Primera vista de la aplicacion: formulario de inicio de sesion.
             FXMLLoader fxmlLoader = new FXMLLoader(
                     App.class.getResource("/com/Interfaz/login.fxml"));
 

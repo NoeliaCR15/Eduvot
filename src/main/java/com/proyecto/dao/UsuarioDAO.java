@@ -13,6 +13,7 @@ import com.proyecto.modelos.Usuario;
 
 public class UsuarioDAO {
 
+    // Inserta el usuario principal y guarda en el modelo el ID generado.
     public boolean insertarUsuario(Usuario usuario) {
         String sql = "INSERT INTO usuarios (dni, nombre_usuario, password, es_administrador, activo, grupo_usuario) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionBD.getConexion();
@@ -124,10 +125,23 @@ public class UsuarioDAO {
     }
 
     public boolean eliminarUsuario(int idUsuario) {
+        // Primero se eliminan relaciones dependientes para respetar las claves foraneas.
+        String borrarFamiliaComoFamiliarSql = "DELETE FROM usuario_familia WHERE id_familiar = ?";
+        String borrarFamiliaComoAlumnoSql = "DELETE FROM usuario_familia WHERE id_alumno = ?";
         String borrarSubcategoriasSql = "DELETE FROM usuario_subcategoria WHERE id_usuario = ?";
         String borrarUsuarioSql = "DELETE FROM usuarios WHERE id_usuario = ?";
 
         try (Connection conn = ConexionBD.getConexion()) {
+            try (PreparedStatement psFamilia = conn.prepareStatement(borrarFamiliaComoFamiliarSql)) {
+                psFamilia.setInt(1, idUsuario);
+                psFamilia.executeUpdate();
+            }
+
+            try (PreparedStatement psAlumno = conn.prepareStatement(borrarFamiliaComoAlumnoSql)) {
+                psAlumno.setInt(1, idUsuario);
+                psAlumno.executeUpdate();
+            }
+
             try (PreparedStatement psSubcategorias = conn.prepareStatement(borrarSubcategoriasSql)) {
                 psSubcategorias.setInt(1, idUsuario);
                 psSubcategorias.executeUpdate();
@@ -218,7 +232,90 @@ public class UsuarioDAO {
         return subcategorias;
     }
 
+    public List<Usuario> obtenerAlumnos() {
+        List<Usuario> alumnos = new ArrayList<>();
+        // Solo se muestran usuarios marcados como Alumnado en usuario_subcategoria.
+        String sql = """
+                SELECT DISTINCT u.*
+                FROM usuarios u
+                INNER JOIN usuario_subcategoria us ON us.id_usuario = u.id_usuario
+                INNER JOIN subcategorias s ON s.id_subcategoria = us.id_subcategoria
+                WHERE LOWER(s.nombre) = 'alumnado'
+                ORDER BY u.nombre_usuario ASC
+                """;
+
+        try (Connection conn = ConexionBD.getConexion();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                alumnos.add(mapearUsuario(rs));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener alumnos: " + e.getMessage());
+        }
+
+        return alumnos;
+    }
+
+    public List<Usuario> obtenerAlumnosFamilia(int idFamiliar) {
+        List<Usuario> alumnos = new ArrayList<>();
+        String sql = """
+                SELECT u.*
+                FROM usuario_familia uf
+                INNER JOIN usuarios u ON u.id_usuario = uf.id_alumno
+                WHERE uf.id_familiar = ?
+                ORDER BY u.nombre_usuario ASC
+                """;
+
+        try (Connection conn = ConexionBD.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idFamiliar);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                alumnos.add(mapearUsuario(rs));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener alumnos de familia: " + e.getMessage());
+        }
+
+        return alumnos;
+    }
+
+    public boolean guardarAlumnosFamilia(int idFamiliar, List<Integer> idsAlumnos) {
+        // Se reemplazan las relaciones antiguas por la seleccion actual del formulario.
+        String borrarSql = "DELETE FROM usuario_familia WHERE id_familiar = ?";
+        String insertarSql = "INSERT INTO usuario_familia (id_familiar, id_alumno) VALUES (?, ?)";
+
+        try (Connection conn = ConexionBD.getConexion()) {
+            try (PreparedStatement psBorrar = conn.prepareStatement(borrarSql)) {
+                psBorrar.setInt(1, idFamiliar);
+                psBorrar.executeUpdate();
+            }
+
+            try (PreparedStatement psInsertar = conn.prepareStatement(insertarSql)) {
+                for (Integer idAlumno : idsAlumnos) {
+                    psInsertar.setInt(1, idFamiliar);
+                    psInsertar.setInt(2, idAlumno);
+                    psInsertar.addBatch();
+                }
+                psInsertar.executeBatch();
+            }
+
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Error al guardar alumnos de familia: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean guardarSubcategoriasUsuario(int idUsuario, List<String> subcategorias) {
+        // Igual que con familia: se borra la seleccion previa y se guarda la nueva.
         String borrarSql = "DELETE FROM usuario_subcategoria WHERE id_usuario = ?";
         String insertarSql = """
                 INSERT INTO usuario_subcategoria (id_usuario, id_subcategoria)
@@ -275,5 +372,18 @@ public class UsuarioDAO {
             System.out.println("Error al validar login: " + e.getMessage());
         }
         return null;
+    }
+
+    private Usuario mapearUsuario(ResultSet rs) throws SQLException {
+        // Centraliza la conversion de una fila SQL al modelo Usuario.
+        return new Usuario(
+                rs.getInt("id_usuario"),
+                rs.getString("dni"),
+                rs.getString("nombre_usuario"),
+                rs.getString("password"),
+                rs.getBoolean("es_administrador"),
+                rs.getBoolean("activo"),
+                rs.getString("grupo_usuario")
+        );
     }
 }

@@ -34,6 +34,7 @@ public class PanelUsuarioController {
 
     @FXML
     public void initialize() {
+        // Conserva la portada del usuario para volver desde modulos internos.
         contenidoDashboard = new ArrayList<>(contenidoUsuario.getChildren());
     }
 
@@ -76,6 +77,7 @@ public class PanelUsuarioController {
     }
 
     private void mostrarVistaPendiente(String titulo, String mensaje) {
+        // Vista temporal reutilizable hasta implementar votaciones y participacion.
         HBox cabecera = new HBox(18);
         cabecera.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         cabecera.getStyleClass().add("user-hero");

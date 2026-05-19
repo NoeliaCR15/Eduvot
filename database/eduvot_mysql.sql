@@ -27,10 +27,18 @@ CREATE TABLE IF NOT EXISTS usuario_subcategoria (
     FOREIGN KEY (id_subcategoria) REFERENCES subcategorias(id_subcategoria)
 );
 
+CREATE TABLE IF NOT EXISTS usuario_familia (
+    id_familiar INT NOT NULL,
+    id_alumno INT NOT NULL,
+    PRIMARY KEY (id_familiar, id_alumno),
+    FOREIGN KEY (id_familiar) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_alumno) REFERENCES usuarios(id_usuario)
+);
+
 INSERT INTO subcategorias (nombre) VALUES
     ('Alumnado'),
     ('Profesorado'),
-    ('Familias')
+    ('Familia o tutor')
 ON DUPLICATE KEY UPDATE
     nombre = VALUES(nombre);
 

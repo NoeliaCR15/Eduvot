@@ -32,6 +32,7 @@ public class MenuController {
 
     @FXML
     public void initialize() {
+        // Guarda el dashboard inicial para poder volver desde las vistas internas.
         contenidoDashboard = new ArrayList<>(contenidoPrincipal.getChildren());
     }
 
@@ -47,7 +48,7 @@ public class MenuController {
 
     @FXML
     private void abrirSubcategorias() {
-        mostrarModuloPendiente("Subcategorias", "Aqui construiremos la gestion de subcategorias y colectivos.");
+        cargarVistaSubcategorias();
     }
 
     @FXML
@@ -88,6 +89,7 @@ public class MenuController {
 
     private void cargarVistaUsuarios() {
         try {
+            // Carga la vista dentro del panel principal sin abrir una ventana nueva.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/GestionUsuarios.fxml"));
             Parent root = loader.load();
             GestionUsuariosController controller = loader.getController();
@@ -99,6 +101,23 @@ public class MenuController {
             contenidoPrincipal.getChildren().setAll(scrollPane);
         } catch (IOException e) {
             System.out.println("Error al cargar gestion de usuarios: " + e.getMessage());
+        }
+    }
+
+    private void cargarVistaSubcategorias() {
+        try {
+            // Mismo patron de carga que usuarios: FXML + controlador + ScrollPane.
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/GestionSubcategorias.fxml"));
+            Parent root = loader.load();
+            GestionSubcategoriasController controller = loader.getController();
+            controller.setMenuController(this);
+
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            contenidoPrincipal.getChildren().setAll(scrollPane);
+        } catch (IOException e) {
+            System.out.println("Error al cargar gestion de subcategorias: " + e.getMessage());
         }
     }
 }

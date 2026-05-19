@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.proyecto.controladores.GestionSubcategoriasController">
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="24.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" styleClass="page-header">
+                    <children>
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="page-title" text="Gestion de subcategorias" />
+                                <Label styleClass="page-subtitle" text="Organiza los colectivos que participaran en los procesos de votacion." wrapText="true" />
+                            </children>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#volverPanelAdministrador" styleClass="secondary-button" text="Volver" />
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="22.0" right="22.0" top="20.0" />
+                    </padding>
+                </HBox>
+
+                <VBox spacing="18.0" styleClass="form-card">
+                    <padding>
+                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="section-title" text="Datos de la subcategoria" />
+
+                        <HBox alignment="BOTTOM_LEFT" spacing="16.0">
+                            <children>
+                                <VBox spacing="6.0">
+                                    <children>
+                                        <Label styleClass="field-label" text="Nombre" />
+                                        <TextField fx:id="txtNombre" promptText="Nombre de la subcategoria" styleClass="admin-field" />
+                                    </children>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button mnemonicParsing="false" onAction="#editarSubcategoria" prefWidth="125.0" styleClass="secondary-button" text="Editar" />
+                                <Button mnemonicParsing="false" onAction="#eliminarSubcategoria" prefWidth="125.0" styleClass="secondary-button" text="Eliminar" />
+                                <Button mnemonicParsing="false" onAction="#limpiarCampos" prefWidth="125.0" styleClass="secondary-button" text="Limpiar" />
+                                <Button mnemonicParsing="false" onAction="#agregarSubcategoria" prefWidth="150.0" styleClass="module-button" text="Agregar" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <VBox spacing="14.0" styleClass="table-card">
+                    <padding>
+                        <Insets bottom="22.0" left="22.0" right="22.0" top="22.0" />
+                    </padding>
+                    <children>
+                        <Label styleClass="section-title" text="Buscar subcategorias" />
+                        <HBox spacing="12.0">
+                            <children>
+                                <TextField fx:id="txtBuscarSubcategoria" promptText="Buscar por nombre" styleClass="admin-field" />
+                                <Button mnemonicParsing="false" onAction="#buscarSubcategorias" styleClass="module-button" text="Buscar" />
+                                <Button mnemonicParsing="false" onAction="#limpiarBusqueda" styleClass="secondary-button" text="Limpiar busqueda" />
+                            </children>
+                        </HBox>
+                        <TableView fx:id="tablaSubcategorias" prefHeight="400.0">
+                            <columns>
+                                <TableColumn fx:id="colId" prefWidth="90.0" text="ID" />
+                                <TableColumn fx:id="colNombre" prefWidth="460.0" text="Nombre" />
+                                <TableColumn fx:id="colUsuariosAsociados" prefWidth="180.0" text="Usuarios asociados" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

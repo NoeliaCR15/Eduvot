@@ -19,6 +19,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class GestionUsuariosController {
@@ -40,6 +41,12 @@ public class GestionUsuariosController {
 
     @FXML
     private MenuButton btnSubcategorias;
+
+    @FXML
+    private VBox contenedorFamilia;
+
+    @FXML
+    private MenuButton btnAlumnosFamilia;
 
     @FXML
     private CheckBox chkAdministrador;
@@ -71,6 +78,7 @@ public class GestionUsuariosController {
     private UsuarioDAO usuarioDAO;
     private ObservableList<Usuario> listaUsuarios;
     private MenuController menuController;
+    private boolean cargandoAlumnosFamilia;
 
     public void setMenuController(MenuController menuController) {
         this.menuController = menuController;
@@ -82,7 +90,9 @@ public class GestionUsuariosController {
         usuarioDAO = new UsuarioDAO();
         configurarCursos();
         configurarDesplegableSubcategorias();
+        configurarDesplegableAlumnosFamilia();
 
+        // Enlaza cada columna de la tabla con una propiedad del modelo Usuario.
         colId.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getIdUsuario()).asObject());
         colDni.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDni()));
         colNombreUsuario.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNombreUsuario()));
@@ -96,6 +106,7 @@ public class GestionUsuariosController {
     }
 
     private void configurarSeleccionTabla() {
+        // Al seleccionar un usuario, se cargan tambien sus subcategorias y alumnos vinculados.
         tablaUsuarios.getSelectionModel().selectedItemProperty().addListener((obs, anterior, seleccionado) -> {
             if (seleccionado != null) {
                 txtDni.setText(seleccionado.getDni());
@@ -103,6 +114,7 @@ public class GestionUsuariosController {
                 txtPassword.setText(seleccionado.getPassword());
                 cmbCurso.setValue(seleccionado.getGrupo());
                 seleccionarSubcategorias(usuarioDAO.obtenerSubcategoriasUsuario(seleccionado.getIdUsuario()));
+                seleccionarAlumnosFamilia(usuarioDAO.obtenerAlumnosFamilia(seleccionado.getIdUsuario()));
                 chkAdministrador.setSelected(seleccionado.isEsAdministrador());
                 chkActivo.setSelected(seleccionado.isActivo());
             }
@@ -111,6 +123,12 @@ public class GestionUsuariosController {
 
     @FXML
     private void agregarUsuario() {
+        // Evita duplicados por error cuando el formulario esta cargado desde una fila existente.
+        if (tablaUsuarios.getSelectionModel().getSelectedItem() != null) {
+            mostrarAlerta("Usuario ya seleccionado", "Para guardar cambios de un usuario existente debes pulsar Editar. Usa Limpiar si quieres crear un usuario nuevo.");
+            return;
+        }
+
         if (!validarCampos()) {
             return;
         }
@@ -126,6 +144,7 @@ public class GestionUsuariosController {
 
         if (usuarioDAO.insertarUsuario(nuevo)) {
             usuarioDAO.guardarSubcategoriasUsuario(nuevo.getIdUsuario(), obtenerSubcategoriasSeleccionadas());
+            usuarioDAO.guardarAlumnosFamilia(nuevo.getIdUsuario(), obtenerIdsAlumnosFamiliaSeleccionados());
             mostrarAlerta("Exito", "Usuario anadido correctamente.");
             refrescarBusquedaActual();
             limpiarCampos();
@@ -158,6 +177,7 @@ public class GestionUsuariosController {
 
         if (usuarioDAO.actualizarUsuario(actualizado)) {
             usuarioDAO.guardarSubcategoriasUsuario(actualizado.getIdUsuario(), obtenerSubcategoriasSeleccionadas());
+            usuarioDAO.guardarAlumnosFamilia(actualizado.getIdUsuario(), obtenerIdsAlumnosFamiliaSeleccionados());
             mostrarAlerta("Exito", "Usuario actualizado correctamente.");
             refrescarBusquedaActual();
             limpiarCampos();
@@ -191,6 +211,7 @@ public class GestionUsuariosController {
         cmbCurso.setValue(null);
         cmbCurso.getEditor().clear();
         seleccionarSubcategorias(List.of());
+        seleccionarAlumnosFamilia(List.of());
         chkAdministrador.setSelected(false);
         chkActivo.setSelected(true);
         tablaUsuarios.getSelectionModel().clearSelection();
@@ -247,6 +268,11 @@ public class GestionUsuariosController {
             return false;
         }
 
+        if (esSubcategoriaFamiliarSeleccionada() && obtenerIdsAlumnosFamiliaSeleccionados().isEmpty()) {
+            mostrarAlerta("Alumno obligatorio", "Si el usuario pertenece a Familia o tutor, debes seleccionar al menos un alumno vinculado.");
+            return false;
+        }
+
         return true;
     }
 
@@ -283,10 +309,32 @@ public class GestionUsuariosController {
 
         for (String subcategoria : subcategorias) {
             CheckMenuItem item = new CheckMenuItem(subcategoria);
-            item.selectedProperty().addListener((obs, antes, ahora) -> actualizarTextoSubcategorias());
+            item.selectedProperty().addListener((obs, antes, ahora) -> {
+                actualizarTextoSubcategorias();
+                actualizarVistaFamilia();
+            });
             btnSubcategorias.getItems().add(item);
         }
         actualizarTextoSubcategorias();
+        actualizarVistaFamilia();
+    }
+
+    private void configurarDesplegableAlumnosFamilia() {
+        List<Integer> idsSeleccionados = obtenerIdsAlumnosFamiliaSeleccionados();
+        // Bandera para evitar recargas encadenadas mientras se reconstruye el desplegable.
+        cargandoAlumnosFamilia = true;
+        btnAlumnosFamilia.getItems().clear();
+
+        for (Usuario alumno : usuarioDAO.obtenerAlumnos()) {
+            CheckMenuItem item = new CheckMenuItem(alumno.toString());
+            item.setUserData(alumno);
+            item.setSelected(idsSeleccionados.contains(alumno.getIdUsuario()));
+            item.selectedProperty().addListener((obs, antes, ahora) -> actualizarTextoAlumnosFamilia());
+            btnAlumnosFamilia.getItems().add(item);
+        }
+
+        cargandoAlumnosFamilia = false;
+        actualizarTextoAlumnosFamilia();
     }
 
     private String obtenerCursoSeleccionado() {
@@ -318,11 +366,75 @@ public class GestionUsuariosController {
         }
 
         actualizarTextoSubcategorias();
+        actualizarVistaFamilia();
     }
 
     private void actualizarTextoSubcategorias() {
         List<String> subcategorias = obtenerSubcategoriasSeleccionadas();
         btnSubcategorias.setText(subcategorias.isEmpty() ? "Seleccionar subcategorias" : String.join(", ", subcategorias));
+    }
+
+    private boolean esSubcategoriaFamiliarSeleccionada() {
+        // Permite pequenas variaciones en el nombre de la subcategoria familiar.
+        return obtenerSubcategoriasSeleccionadas().stream()
+                .map(subcategoria -> subcategoria.toLowerCase().trim())
+                .anyMatch(subcategoria -> subcategoria.contains("famil")
+                        || subcategoria.contains("padre")
+                        || subcategoria.contains("madre")
+                        || subcategoria.contains("tutor"));
+    }
+
+    private void actualizarVistaFamilia() {
+        boolean mostrarFamilia = esSubcategoriaFamiliarSeleccionada();
+        contenedorFamilia.setVisible(mostrarFamilia);
+        contenedorFamilia.setManaged(mostrarFamilia);
+
+        // Si el usuario deja de ser familia/tutor, se limpian relaciones para no guardar datos incoherentes.
+        if (mostrarFamilia && !cargandoAlumnosFamilia) {
+            configurarDesplegableAlumnosFamilia();
+        } else if (!mostrarFamilia) {
+            seleccionarAlumnosFamilia(List.of());
+        }
+    }
+
+    private List<Integer> obtenerIdsAlumnosFamiliaSeleccionados() {
+        return btnAlumnosFamilia.getItems().stream()
+                .filter(item -> item instanceof CheckMenuItem)
+                .map(item -> (CheckMenuItem) item)
+                .filter(CheckMenuItem::isSelected)
+                .map(CheckMenuItem::getUserData)
+                .filter(data -> data instanceof Usuario)
+                .map(data -> ((Usuario) data).getIdUsuario())
+                .toList();
+    }
+
+    private void seleccionarAlumnosFamilia(List<Usuario> alumnosGuardados) {
+        List<Integer> idsAlumnosGuardados = alumnosGuardados.stream()
+                .map(Usuario::getIdUsuario)
+                .toList();
+
+        for (javafx.scene.control.MenuItem menuItem : btnAlumnosFamilia.getItems()) {
+            if (menuItem instanceof CheckMenuItem item && item.getUserData() instanceof Usuario alumno) {
+                item.setSelected(idsAlumnosGuardados.contains(alumno.getIdUsuario()));
+            }
+        }
+
+        actualizarTextoAlumnosFamilia();
+    }
+
+    private void actualizarTextoAlumnosFamilia() {
+        List<String> alumnos = btnAlumnosFamilia.getItems().stream()
+                .filter(item -> item instanceof CheckMenuItem)
+                .map(item -> (CheckMenuItem) item)
+                .filter(CheckMenuItem::isSelected)
+                .map(CheckMenuItem::getText)
+                .toList();
+
+        if (btnAlumnosFamilia.getItems().isEmpty()) {
+            btnAlumnosFamilia.setText("No hay alumnos disponibles");
+        } else {
+            btnAlumnosFamilia.setText(alumnos.isEmpty() ? "Seleccionar alumno/s" : String.join(", ", alumnos));
+        }
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

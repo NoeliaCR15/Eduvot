@@ -7,6 +7,7 @@ public class Usuario {
     private String password;
     private boolean esAdministrador;
     private boolean activo;
+    // Curso o grupo academico del usuario. Puede quedar vacio para perfiles sin curso.
     private String grupo;
 
     public Usuario(int idUsuario, String dni, String nombreUsuario, String password, boolean esAdministrador, boolean activo, String grupo) {
@@ -81,6 +82,7 @@ public class Usuario {
 
     @Override
     public String toString() {
+        // Texto usado en desplegables, por ejemplo al vincular familia/tutor con alumnado.
         return nombreUsuario + " (" + dni + ")";
     }
 }

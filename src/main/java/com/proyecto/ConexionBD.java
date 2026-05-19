@@ -10,10 +10,12 @@ public class ConexionBD {
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
 
+    // Se reutiliza una unica conexion mientras siga abierta.
     private static Connection conexion = null;
 
     public static Connection getConexion() {
         try {
+            // Si no existe conexion o MySQL la cerro, se crea una nueva.
             if (conexion == null || conexion.isClosed()) {
                 conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
                 System.out.println("Conexión establecida con la base de datos.");
