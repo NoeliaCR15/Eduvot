@@ -35,6 +35,62 @@ CREATE TABLE IF NOT EXISTS usuario_familia (
     FOREIGN KEY (id_alumno) REFERENCES usuarios(id_usuario)
 );
 
+CREATE TABLE IF NOT EXISTS encuestas (
+    id_encuesta INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_fin DATETIME NOT NULL,
+    activa BOOLEAN NOT NULL DEFAULT true,
+    tipo_encuesta ENUM('UNA_OPCION', 'VARIAS_OPCIONES') NOT NULL DEFAULT 'UNA_OPCION',
+    creada_por INT,
+    FOREIGN KEY (creada_por) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE IF NOT EXISTS encuesta_subcategoria (
+    id_encuesta INT NOT NULL,
+    id_subcategoria INT NOT NULL,
+    PRIMARY KEY (id_encuesta, id_subcategoria),
+    FOREIGN KEY (id_encuesta) REFERENCES encuestas(id_encuesta),
+    FOREIGN KEY (id_subcategoria) REFERENCES subcategorias(id_subcategoria)
+);
+
+CREATE TABLE IF NOT EXISTS opciones_voto (
+    id_opcion INT AUTO_INCREMENT PRIMARY KEY,
+    id_encuesta INT NOT NULL,
+    texto_opcion VARCHAR(150) NOT NULL,
+    FOREIGN KEY (id_encuesta) REFERENCES encuestas(id_encuesta)
+);
+
+CREATE TABLE IF NOT EXISTS votos (
+    id_voto INT AUTO_INCREMENT PRIMARY KEY,
+    id_encuesta INT NOT NULL,
+    id_usuario INT NOT NULL,
+    codigo_verificacion VARCHAR(100),
+    fecha_voto DATETIME NOT NULL,
+    UNIQUE KEY uq_voto_usuario_encuesta (id_encuesta, id_usuario),
+    FOREIGN KEY (id_encuesta) REFERENCES encuestas(id_encuesta),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE IF NOT EXISTS detalle_voto (
+    id_voto INT NOT NULL,
+    id_opcion INT NOT NULL,
+    PRIMARY KEY (id_voto, id_opcion),
+    FOREIGN KEY (id_voto) REFERENCES votos(id_voto),
+    FOREIGN KEY (id_opcion) REFERENCES opciones_voto(id_opcion)
+);
+
+CREATE TABLE IF NOT EXISTS encuestas_archivadas (
+    id_archivo INT AUTO_INCREMENT PRIMARY KEY,
+    id_encuesta INT NOT NULL UNIQUE,
+    fecha_archivo DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    motivo VARCHAR(150),
+    archivada_por INT,
+    FOREIGN KEY (id_encuesta) REFERENCES encuestas(id_encuesta),
+    FOREIGN KEY (archivada_por) REFERENCES usuarios(id_usuario)
+);
+
 INSERT INTO subcategorias (nombre) VALUES
     ('Alumnado'),
     ('Profesorado'),

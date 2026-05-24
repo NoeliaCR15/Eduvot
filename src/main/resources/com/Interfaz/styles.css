@@ -290,6 +290,37 @@
     -fx-pref-height: 40;
 }
 
+.admin-text-area {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #D0D7E2;
+    -fx-border-radius: 8;
+    -fx-font-size: 14px;
+}
+
+.admin-text-area .content {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+}
+
+.option-list {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #D0D7E2;
+    -fx-border-radius: 8;
+}
+
+.option-choice {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #E7EDF5;
+    -fx-border-radius: 12;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1B2A41;
+    -fx-padding: 14 18 14 18;
+    -fx-max-width: infinity;
+}
+
 .menu-button.admin-field {
     -fx-alignment: CENTER_LEFT;
     -fx-background-color: white;

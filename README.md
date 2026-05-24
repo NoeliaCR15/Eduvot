@@ -24,6 +24,9 @@ src/main/java/com/proyecto
 |   |
 |   |-- Subcategoria.java
 |       Modelo de datos para subcategorias.
+|   |
+|   |-- Encuesta.java
+|       Modelo de datos para encuestas y procesos de votacion.
 |
 |-- dao
 |   |-- UsuarioDAO.java
@@ -43,6 +46,16 @@ src/main/java/com/proyecto
 |       - eliminar subcategoria
 |       - buscar/listar subcategorias
 |       - contar usuarios asociados
+|   |
+|   |-- EncuestaDAO.java
+|       Acceso a base de datos para encuestas:
+|       - insertar encuesta
+|       - actualizar encuesta
+|       - eliminar encuesta
+|       - buscar/listar encuestas
+|       - guardar opciones de voto
+|       - guardar subcategorias destinatarias
+|       - registrar votos y consultar participacion/resultados
 |
 |-- controladores
 |   |-- LoginController.java
@@ -50,10 +63,7 @@ src/main/java/com/proyecto
 |   |
 |   |-- MenuController.java
 |   |   Controla el panel del administrador.
-|   |   Actualmente abre gestion de usuarios y deja pendientes:
-|   |   - subcategorias
-|   |   - encuestas
-|   |   - resultados
+|   |   Abre las vistas de usuarios, colectivos, votaciones y resultados dentro del panel.
 |   |
 |   |-- GestionUsuariosController.java
 |   |   Controla el CRUD de usuarios.
@@ -61,9 +71,15 @@ src/main/java/com/proyecto
 |   |-- GestionSubcategoriasController.java
 |   |   Controla el CRUD de subcategorias.
 |   |
+|   |-- GestionEncuestasController.java
+|   |   Controla la creacion y administracion de encuestas.
+|   |
+|   |-- ResultadosController.java
+|   |   Controla la consulta de resultados y participacion para administracion.
+|   |
 |   |-- PanelUsuarioController.java
 |       Controla el panel del usuario votante.
-|       Por ahora tiene vistas pendientes para votaciones y participacion.
+|       Muestra votaciones disponibles, registro de voto e historial de participacion.
 ```
 
 ## Interfaces actuales
@@ -83,6 +99,12 @@ src/main/resources/com/Interfaz
 |-- GestionSubcategorias.fxml
 |   Vista de gestion de subcategorias.
 |
+|-- GestionEncuestas.fxml
+|   Vista de gestion de encuestas y votaciones.
+|
+|-- Resultados.fxml
+|   Vista de resultados, participacion y grafica de recuento.
+|
 |-- PanelUsuario.fxml
 |   Panel principal del usuario votante.
 |
@@ -101,6 +123,13 @@ El script principal esta en:
 database/eduvot_mysql.sql
 ```
 
+Para actualizar una base ya creada sin borrar datos, se pueden ejecutar las migraciones
+puntuales de la carpeta `database`, por ejemplo:
+
+```text
+database/migracion_archivo_encuestas.sql
+```
+
 Tablas actuales:
 
 ```text
@@ -115,6 +144,24 @@ Relaciona usuarios con una o varias subcategorias.
 
 usuario_familia
 Relaciona usuarios de la subcategoria Familia o tutor con uno o varios alumnos.
+
+encuestas
+Guarda los procesos de votacion, fechas, estado y tipo de voto.
+
+encuesta_subcategoria
+Relaciona cada encuesta con las subcategorias destinatarias.
+
+opciones_voto
+Guarda las opciones disponibles para cada encuesta.
+
+votos
+Guarda la participacion de cada usuario en una encuesta.
+
+detalle_voto
+Guarda la opcion u opciones elegidas en cada voto.
+
+encuestas_archivadas
+Registra que encuestas ya realizadas pasan a historico, quien las archivo y el motivo.
 ```
 
 ## Modulos implementados
@@ -135,64 +182,31 @@ Relaciona usuarios de la subcategoria Familia o tutor con uno o varios alumnos.
    Permite crear, editar, eliminar, buscar y listar subcategorias.
    No permite eliminar una subcategoria que este asociada a usuarios.
 
-5. Panel de usuario
-   Muestra la zona del votante, todavia pendiente de conectar con votaciones reales.
+5. Gestion de encuestas y votaciones
+   Permite crear, editar, eliminar, buscar y listar encuestas.
+   Permite definir fechas, tipo de voto, subcategorias destinatarias y opciones.
+   No permite editar o eliminar encuestas que ya tienen votos registrados.
+
+6. Resultados y participacion
+   Permite seleccionar una encuesta, ver votos, destinatarios, porcentaje de participacion,
+   recuento por opcion y grafica de barras.
+
+7. Panel de usuario
+   Muestra votaciones disponibles, permite votar y permite consultar la participacion propia.
+
+8. Archivo de encuestas
+   La base de datos ya contempla una tabla para archivar encuestas finalizadas.
+   Desde resultados se pueden archivar encuestas finalizadas y consultar el listado historico.
 ```
 
-## Modulos pendientes de implementar
+## Mejoras futuras
 
-### 1. Encuestas y votaciones
-
-Clases previstas:
+Ideas de mejora:
 
 ```text
-src/main/java/com/proyecto/modelos/Encuesta.java
-src/main/java/com/proyecto/modelos/Opcion.java
-src/main/java/com/proyecto/modelos/Voto.java
-src/main/java/com/proyecto/dao/EncuestaDAO.java
-src/main/java/com/proyecto/dao/VotoDAO.java
-src/main/java/com/proyecto/controladores/GestionEncuestasController.java
-src/main/resources/com/Interfaz/GestionEncuestas.fxml
-```
-
-Funciones previstas:
-
-```text
-- Crear encuestas o procesos de votacion.
-- Definir fechas de inicio y fin.
-- Asociar encuestas a subcategorias.
-- Gestionar opciones de voto.
-- Activar o cerrar votaciones.
-```
-
-### 2. Resultados y participacion
-
-Clases previstas:
-
-```text
-src/main/java/com/proyecto/modelos/ResultadoEncuesta.java
-src/main/java/com/proyecto/dao/ResultadoDAO.java
-src/main/java/com/proyecto/controladores/ResultadosController.java
-src/main/resources/com/Interfaz/Resultados.fxml
-```
-
-Funciones previstas:
-
-```text
-- Consultar resultados por encuesta.
-- Ver recuento de votos.
-- Consultar participacion general.
-- Mostrar porcentajes o resumen de resultados.
-```
-
-### 3. Panel de usuario votante
-
-Funciones previstas:
-
-```text
-- Mostrar votaciones disponibles para el usuario.
-- Permitir votar una sola vez por encuesta.
-- Mostrar votaciones ya realizadas.
+- Mejorar confirmacion del voto antes de registrarlo.
+- Decidir si se mostraran resultados publicados cuando una encuesta este cerrada.
+- Pulir mensajes y estados vacios.
 ```
 
 ## Orden recomendado de desarrollo
@@ -200,7 +214,7 @@ Funciones previstas:
 ```text
 1. Usuarios                         Ya implementado
 2. Subcategorias                    Ya implementado
-3. Encuestas y votaciones           Siguiente paso
-4. Resultados y participacion       Despues
-5. Panel de usuario/votante         Se completara cuando existan encuestas
+3. Encuestas y votaciones           Ya implementado en administracion
+4. Panel de usuario/votante         Ya implementado
+5. Resultados y participacion       Ya implementado en administracion
 ```

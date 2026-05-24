@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -29,6 +28,7 @@ public class MenuController {
     private VBox contenidoPrincipal;
 
     private List<Node> contenidoDashboard;
+    private Usuario usuarioActual;
 
     @FXML
     public void initialize() {
@@ -37,6 +37,7 @@ public class MenuController {
     }
 
     public void inicializarUsuario(Usuario usuario) {
+        usuarioActual = usuario;
         lblNombreUsuario.setText("EduVot Admin - " + usuario.getNombreUsuario());
         lblRolUsuario.setText("Administrador");
     }
@@ -53,12 +54,12 @@ public class MenuController {
 
     @FXML
     private void abrirEncuestas() {
-        mostrarModuloPendiente("Encuestas", "Aqui desarrollaremos la creacion y administracion de encuestas.");
+        cargarVistaEncuestas();
     }
 
     @FXML
     private void abrirResultados() {
-        mostrarModuloPendiente("Resultados", "Aqui mostraremos recuentos, participacion y resultados.");
+        cargarVistaResultados();
     }
 
     @FXML
@@ -73,14 +74,6 @@ public class MenuController {
         } catch (IOException e) {
             System.out.println("Error al cerrar sesion: " + e.getMessage());
         }
-    }
-
-    private void mostrarModuloPendiente(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText("Modulo en preparacion");
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     public void mostrarDashboard() {
@@ -118,6 +111,40 @@ public class MenuController {
             contenidoPrincipal.getChildren().setAll(scrollPane);
         } catch (IOException e) {
             System.out.println("Error al cargar gestion de subcategorias: " + e.getMessage());
+        }
+    }
+
+    private void cargarVistaEncuestas() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/GestionEncuestas.fxml"));
+            Parent root = loader.load();
+            GestionEncuestasController controller = loader.getController();
+            controller.setMenuController(this);
+            controller.setUsuarioActual(usuarioActual);
+
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            contenidoPrincipal.getChildren().setAll(scrollPane);
+        } catch (IOException e) {
+            System.out.println("Error al cargar gestion de encuestas: " + e.getMessage());
+        }
+    }
+
+    private void cargarVistaResultados() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/Interfaz/Resultados.fxml"));
+            Parent root = loader.load();
+            ResultadosController controller = loader.getController();
+            controller.setMenuController(this);
+            controller.setUsuarioActual(usuarioActual);
+
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            contenidoPrincipal.getChildren().setAll(scrollPane);
+        } catch (IOException e) {
+            System.out.println("Error al cargar resultados: " + e.getMessage());
         }
     }
 }

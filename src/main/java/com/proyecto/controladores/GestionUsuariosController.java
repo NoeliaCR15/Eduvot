@@ -304,7 +304,7 @@ public class GestionUsuariosController {
 
         List<String> subcategorias = usuarioDAO.obtenerSubcategorias();
         if (subcategorias.isEmpty()) {
-            subcategorias = List.of("Alumnado", "Profesorado", "Familias");
+            subcategorias = List.of("Alumnado", "Profesorado", "Familia o tutor");
         }
 
         for (String subcategoria : subcategorias) {

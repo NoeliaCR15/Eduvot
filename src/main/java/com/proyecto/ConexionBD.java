@@ -18,7 +18,7 @@ public class ConexionBD {
             // Si no existe conexion o MySQL la cerro, se crea una nueva.
             if (conexion == null || conexion.isClosed()) {
                 conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
-                System.out.println("Conexión establecida con la base de datos.");
+                System.out.println("Conexion establecida con la base de datos.");
             }
         } catch (SQLException e) {
             System.err.println("Error al conectar con la base de datos: " + e.getMessage());
@@ -31,7 +31,7 @@ public class ConexionBD {
         try {
             if (conexion != null && !conexion.isClosed()) {
                 conexion.close();
-                System.out.println("🔒 Conexión cerrada correctamente.");
+                System.out.println("Conexion cerrada correctamente.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
