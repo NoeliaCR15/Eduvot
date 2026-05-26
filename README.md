@@ -178,9 +178,10 @@ Registra que encuestas ya realizadas pasan a historico, quien las archivo y el m
    Permite asignar varias subcategorias a un mismo usuario.
    Si el usuario pertenece a Familia o tutor, permite seleccionar de que alumno/s es familiar.
 
-4. Gestion de subcategorias
-   Permite crear, editar, eliminar, buscar y listar subcategorias.
-   No permite eliminar una subcategoria que este asociada a usuarios.
+4. Gestion de colectivos (subcategorias)
+   Permite crear, editar, eliminar, buscar y listar colectivos de participacion.
+   Estos colectivos se guardan como subcategorias: Alumnado, Profesorado, Familia o tutor, etc.
+   No permite eliminar un colectivo que este asociado a usuarios.
 
 5. Gestion de encuestas y votaciones
    Permite crear, editar, eliminar, buscar y listar encuestas.
